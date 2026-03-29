@@ -104,9 +104,9 @@ def render_auth_gate():
     st.markdown("""
     <div style="text-align:center;padding:1.5rem 0 .5rem;">
         <span style="font-size:3rem;">⚕️</span>
-        <h1 style="font-weight:400;font-size:2rem;margin:.3rem 0 .2rem;color:#F0F0F0;">MediScan AI</h1>
+        <h1 style="font-weight:400;font-size:2rem;margin:.3rem 0 .2rem;color:#F0F0F0;">CareSync</h1>
         <p style="color:#505050;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;">
-            Clinical Intelligence Platform · Sign in to continue
+            Healthcare Diagnosis &amp; Recommendation System · Sign in to continue
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -158,32 +158,36 @@ def render_sidebar_user():
     initials = "".join(w[0].upper() for w in name.split()[:2])
     joined   = str(user.get("created_at", ""))[:10]
     profile  = get_profile(user["id"])
-    blood    = (profile or {}).get("blood_group", "")
-    age_val  = (profile or {}).get("age", "")
+    blood    = (profile or {}).get("blood_group") or ""
+    age_val  = (profile or {}).get("age") or ""
 
-    st.sidebar.markdown(f"""
-    <div style="background:linear-gradient(135deg,#0F2044,#1A3A6E);
-                border:1px solid rgba(74,158,255,.2);border-radius:14px;
-                padding:1.2rem;margin-bottom:1rem;">
-        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;">
-            <div style="width:40px;height:40px;
-                        background:linear-gradient(135deg,#4A9EFF,#2DD4BF);
-                        border-radius:50%;display:flex;align-items:center;
-                        justify-content:center;font-weight:700;color:#0A1628;
-                        font-size:.9rem;flex-shrink:0;">{initials}</div>
-            <div>
-                <div style="font-size:.9rem;font-weight:600;color:#F0F0F0;">{name}</div>
-                <div style="font-size:.72rem;color:rgba(255,255,255,.4);">@{user['username']}</div>
-            </div>
-        </div>
-        <div style="font-size:.7rem;color:rgba(255,255,255,.35);
-                    border-top:1px solid rgba(255,255,255,.08);
-                    padding-top:.5rem;display:flex;justify-content:space-between;">
-            <span>🗓️ Joined {joined}</span>
-            {"<span>⚕️ " + str(blood) + " · " + str(age_val) + " yrs</span>" if blood or age_val else ""}
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    # Build health info line only when profile data exists
+    health_html = ""
+    if blood and str(blood).strip() and age_val and str(age_val).strip():
+        health_html = f'<span style="color:rgba(255,255,255,.35);">⚕️ {blood} &middot; {age_val} yrs</span>'
+
+    html = (
+        '<div style="background:linear-gradient(135deg,#0F2044,#1A3A6E);'
+        'border:1px solid rgba(74,158,255,.2);border-radius:14px;'
+        'padding:1.2rem;margin-bottom:1rem;">'
+        '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;">'
+        '<div style="width:40px;height:40px;background:linear-gradient(135deg,#4A9EFF,#2DD4BF);'
+        'border-radius:50%;display:flex;align-items:center;justify-content:center;'
+        'font-weight:700;color:#0A1628;font-size:.9rem;flex-shrink:0;">' + initials + '</div>'
+        '<div>'
+        '<div style="font-size:.9rem;font-weight:600;color:#F0F0F0;">' + name + '</div>'
+        '<div style="font-size:.72rem;color:rgba(255,255,255,.4);">@' + user["username"] + '</div>'
+        '</div>'
+        '</div>'
+        '<div style="font-size:.7rem;color:rgba(255,255,255,.35);'
+        'border-top:1px solid rgba(255,255,255,.08);'
+        'padding-top:.5rem;display:flex;justify-content:space-between;">'
+        '<span>🗓️ Joined ' + joined + '</span>'
+        + health_html +
+        '</div>'
+        '</div>'
+    )
+    st.sidebar.markdown(html, unsafe_allow_html=True)
 
     if st.sidebar.button("🚪 Sign Out", use_container_width=True):
         logout()

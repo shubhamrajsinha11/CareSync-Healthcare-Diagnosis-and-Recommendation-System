@@ -1,5 +1,5 @@
 """
-MediScan AI — Clinical Intelligence Platform
+CareSync — Healthcare Diagnosis & Recommendation System
 app.py  |  Main entry point
 
 Run:  streamlit run app.py
@@ -40,7 +40,7 @@ def ensure_list(items):
 
 # ── Page config ────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="MediScan AI — Clinical Intelligence Platform",
+    page_title="CareSync — Healthcare Diagnosis & Recommendation System",
     page_icon="⚕️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -237,8 +237,8 @@ with st.sidebar:
     st.markdown("""
     <div class="sidebar-logo">
         <span class="logo-icon">⚕️</span>
-        <div class="logo-name">MediScan AI</div>
-        <div class="logo-ver">Clinical Intelligence v2.0</div>
+        <div class="logo-name">CareSync</div>
+        <div class="logo-ver">Healthcare Diagnosis System v1.0</div>
     </div>
     """, unsafe_allow_html=True)
     st.markdown("<hr>", unsafe_allow_html=True)
@@ -922,7 +922,7 @@ elif page == "📋  Clinical Report":
         <div class="report-header">
             <div class="rh-label">Clinical Assessment Report</div>
             <div class="rh-name">{patient_name}</div>
-            <div class="rh-meta">Generated on {ts_str} &nbsp;·&nbsp; MediScan AI v2.0</div>
+            <div class="rh-meta">Generated on {ts_str} &nbsp;·&nbsp; CareSync v1.0</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1001,7 +1001,7 @@ SYMPTOMS:   {', '.join(pred.get('symptoms', [])) or 'None recorded'}
 DISCLAIMER: For informational purposes only.
 Always consult a qualified healthcare provider.
 {"="*54}
-MediScan AI Clinical Intelligence Platform v2.0
+CareSync Healthcare Diagnosis & Recommendation System v1.0
 """
         st.download_button(
             label="📥 Download Clinical Report (.txt)",
@@ -1016,8 +1016,8 @@ MediScan AI Clinical Intelligence Platform v2.0
 st.markdown("<hr style='border:none;border-top:1px solid rgba(255,255,255,.08);margin:2rem 0;'>", unsafe_allow_html=True)
 st.markdown("""
 <div style="text-align:center;padding:1.5rem 2rem;color:#404040;font-size:.8rem;line-height:1.8;">
-    ⚠️ <strong>Medical Disclaimer</strong> — MediScan AI is for informational and educational purposes only.
+    ⚠️ <strong>Medical Disclaimer</strong> — CareSync is for informational and educational purposes only.
     Always consult a qualified healthcare professional.<br>
-    MediScan AI Clinical Intelligence Platform &nbsp;·&nbsp; v2.0 &nbsp;·&nbsp; Built with ❤️ for better health awareness
+    CareSync Healthcare Diagnosis &amp; Recommendation System &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; Built with ❤️ for better health awareness
 </div>
 """, unsafe_allow_html=True)
