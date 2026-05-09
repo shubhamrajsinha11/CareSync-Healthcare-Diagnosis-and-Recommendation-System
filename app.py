@@ -358,7 +358,7 @@ elif page == "🔬  Symptom Analysis":
         col1, col2 = st.columns([1, 1], gap="large")
         with col1:
             st.markdown("#### 👤 Patient Profile")
-            patient_name_input = st.text_input("Full Name", value=st.session_state.patient_data.get("name", ""), placeholder="e.g. Rahul Sharma")
+            patient_name_input = st.text_input("Full Name", value=st.session_state.patient_data.get("name", ""), placeholder="e.g. Shubham Raj Sinha")
             c1i, c2i = st.columns(2)
             with c1i:
                 age       = st.number_input("Age",         min_value=1,   max_value=120,   value=int(st.session_state.patient_data.get("age") or 30))
