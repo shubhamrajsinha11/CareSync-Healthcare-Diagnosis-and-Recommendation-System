@@ -49,6 +49,26 @@ st.set_page_config(
 # ── Initialise database on startup ─────────────────────────────────────────
 init_db()
 
+# ── Auto-train model if not found (for cloud deployment) ───────────────────
+if not os.path.exists("models/best_model.pkl"):
+    st.warning("⚙️ Setting up for the first time — training the ML model, please wait 2–3 minutes...")
+    with st.spinner("Training in progress... please do not close this tab."):
+        try:
+            import subprocess
+            result = subprocess.run(
+                ["python", "train_models.py"],
+                capture_output=True, text=True, timeout=600
+            )
+            if result.returncode == 0:
+                st.success("✅ Model trained successfully! Reloading...")
+                st.rerun()
+            else:
+                st.error(f"Training failed: {result.stderr[-500:]}")
+                st.stop()
+        except Exception as e:
+            st.error(f"Could not train model: {e}")
+            st.stop()
+
 # ── Global CSS ─────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
@@ -358,7 +378,7 @@ elif page == "🔬  Symptom Analysis":
         col1, col2 = st.columns([1, 1], gap="large")
         with col1:
             st.markdown("#### 👤 Patient Profile")
-            patient_name_input = st.text_input("Full Name", value=st.session_state.patient_data.get("name", ""), placeholder="e.g. Shubham Raj Sinha")
+            patient_name_input = st.text_input("Full Name", value=st.session_state.patient_data.get("name", ""), placeholder="e.g. Rahul Sharma")
             c1i, c2i = st.columns(2)
             with c1i:
                 age       = st.number_input("Age",         min_value=1,   max_value=120,   value=int(st.session_state.patient_data.get("age") or 30))
