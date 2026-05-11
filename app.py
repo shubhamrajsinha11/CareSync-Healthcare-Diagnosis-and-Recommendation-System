@@ -624,6 +624,10 @@ elif page == "🥗  Nutrition Plan":
     symptoms_for_diet = st.session_state.get("last_prediction", {}).get("symptoms", [])
     diet_generated    = False
 
+    # Clear saved plan if user hasn't done a prediction yet this session
+    if not st.session_state.get("last_prediction"):
+        st.session_state.pop("diet_plan_result", None)
+
     if st.button("🥗 Generate Nutrition Plan", use_container_width=True):
         if not disease_input:
             st.warning("⚠️ Please enter a condition name.")
@@ -704,26 +708,25 @@ elif page == "🥗  Nutrition Plan":
                 st.markdown("**Healthy Snacks**")
                 for item in alt.get("snacks", []):
                     st.markdown(f'<div class="med-item"><div class="dot-amber"></div>{item}</div>', unsafe_allow_html=True)
+        # Recipe suggestions inside the stored_diet block
+        st.markdown("<hr class='sec-divider'>", unsafe_allow_html=True)
+        st.markdown("##### 👨‍🍳 Quick Recipe Ideas")
+        recipe_disease = stored_diet["disease"]
+        rc = st.columns(3)
+        with rc[0]:
+            st.markdown("**Breakfast**")
+            for r in ensure_list(diet_planner.get_simple_recipe("breakfast", recipe_disease)):
+                st.markdown(f'<div class="med-item"><div class="dot-teal"></div>{r}</div>', unsafe_allow_html=True)
+        with rc[1]:
+            st.markdown("**Lunch**")
+            for r in ensure_list(diet_planner.get_simple_recipe("lunch", recipe_disease)):
+                st.markdown(f'<div class="med-item"><div class="dot-blue"></div>{r}</div>', unsafe_allow_html=True)
+        with rc[2]:
+            st.markdown("**Dinner**")
+            for r in ensure_list(diet_planner.get_simple_recipe("dinner", recipe_disease)):
+                st.markdown(f'<div class="med-item"><div class="dot-amber"></div>{r}</div>', unsafe_allow_html=True)
     else:
         st.markdown('<div class="info-panel" style="text-align:center;padding:3rem;"><div style="font-size:2.5rem;margin-bottom:1rem;">🥗</div><div style="font-size:1rem;color:var(--text-2);">Enter a condition and click <strong>Generate Nutrition Plan</strong>.</div></div>', unsafe_allow_html=True)
-
-    # Recipe suggestions
-    st.markdown("<hr class='sec-divider'>", unsafe_allow_html=True)
-    st.markdown("##### 👨‍🍳 Quick Recipe Ideas")
-    recipe_disease = disease_input if 'disease_input' in dir() else (stored_diet["disease"] if stored_diet else "")
-    rc = st.columns(3)
-    with rc[0]:
-        st.markdown("**Breakfast**")
-        for r in ensure_list(diet_planner.get_simple_recipe("breakfast", recipe_disease)):
-            st.markdown(f'<div class="med-item"><div class="dot-teal"></div>{r}</div>', unsafe_allow_html=True)
-    with rc[1]:
-        st.markdown("**Lunch**")
-        for r in ensure_list(diet_planner.get_simple_recipe("lunch", recipe_disease)):
-            st.markdown(f'<div class="med-item"><div class="dot-blue"></div>{r}</div>', unsafe_allow_html=True)
-    with rc[2]:
-        st.markdown("**Dinner**")
-        for r in ensure_list(diet_planner.get_simple_recipe("dinner", recipe_disease)):
-            st.markdown(f'<div class="med-item"><div class="dot-amber"></div>{r}</div>', unsafe_allow_html=True)
 
 
 # ===========================================================================
